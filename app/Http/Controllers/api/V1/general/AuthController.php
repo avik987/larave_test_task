@@ -6,15 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\V1\UserResource;
 use App\Models\User;
-use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Str;
-use Illuminate\Testing\Fluent\Concerns\Has;
 use PHPUnit\Exception;
 
 class AuthController extends Controller
@@ -24,6 +20,7 @@ class AuthController extends Controller
     {
         try {
             $newUser = User::create([
+                "id" => $request['user_id'],
                 'name' => $request['name'],
                 'login' => $request['login'],
                 'password' => Hash::make($request['password']),
@@ -95,13 +92,10 @@ class AuthController extends Controller
         $validated = Validator::make($request->all(), [
             'name' => 'min:5',
             'login' => 'min:5',
+            'user_id' => 'uuid',
         ]);
-        $errors = [];
         if (!empty($validated->errors()->messages())) {
-            foreach (array_keys($validated->errors()->toArray()) as $error) {
-                $errors[] = [$error => __('validation.' . $error)];
-            }
-            return response()->json(['messages' => $errors], 200);
+            return response()->json(['messages' => $validated->errors()->messages()], 200);
         }
         $user = User::where('id', Auth::id())->first();
         $user->name = $request->name ?? $user->name;

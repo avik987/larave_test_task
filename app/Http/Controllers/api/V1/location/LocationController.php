@@ -37,9 +37,9 @@ class LocationController extends Controller
 
         $validator = Validator::make($request->all(), [
             'ip' => ['ip'],
-            'user_id' => [ 'integer', 'exists:users,id'],
+            'user_id' => ['uuid', 'exists:users,id'],
             'coord_x' => ['regex:/^[-]?(([0-8]?[0-9])\.(\d+))|(90(\.0+)?)$/'],
-            'coord_y' => [ 'regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/']]);
+            'coord_y' => ['regex:/^[-]?((((1[0-7][0-9])|([0-9]?[0-9]))\.(\d+))|180(\.0+)?)$/']]);
 
         if ($validator->fails()) {
             return response()->json([

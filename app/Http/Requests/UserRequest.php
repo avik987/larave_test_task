@@ -27,6 +27,7 @@ class UserRequest extends FormRequest
     {
 
         return [
+            "user_id"=>['required', 'uuid'],
             'name' => ['required', 'string', 'max:255'],
             'login' => ['required', 'string', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8'],
@@ -37,7 +38,6 @@ class UserRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             'success' => false,
-            'message' =>  __('messages.validation_errors'),
             'errors' => $validator->getMessageBag()
         ])->header('Status-Code', 200));
     }

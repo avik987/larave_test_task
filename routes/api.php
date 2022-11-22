@@ -21,7 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::group(["prefix" => "v1"], function () {
     Route::post("registration", [AuthController::class, 'registration']);
-    Route::post("login", [AuthController::class, 'login'])->name("login");
+    Route::get("login", [AuthController::class, 'login'])->name("login");
     Route::middleware('auth:sanctum')->group(function () {
         Route::put("/update-user", [AuthController::class, 'updateUserData']);
         Route::delete("/delete-user", [AuthController::class, 'deleteUser']);
